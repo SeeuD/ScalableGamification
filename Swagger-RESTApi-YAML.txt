@@ -1,0 +1,3721 @@
+# This is an prototype API for a scalable Gamification-Service
+swagger: '2.0'
+info:
+  title: Gamification API
+  description: Gamifiy your software
+  version: "1.0.0"
+  
+host: your.amazon.url
+
+schemes:
+  - http
+  
+basePath: /v1/game
+produces:
+  - application/json
+paths:
+  /environmentID:
+      put:
+        summary: Create a new gamification environment
+        description: |
+          The Product Endpoint is the base Endpoint of the gamificationenvironment 
+          for an Admin.
+        operationId: find pet by id
+        parameters:
+          - name: name
+            in: query
+            description: name of the environment
+            required: true
+            type: string
+          - name: owner
+            in: query
+            description: owner of the environment
+            required: true
+            type: string
+          - name: complexity
+            in: query
+            description: complexity of the environment
+            required: true
+            type: string
+          - name: Token
+            in: header
+            description: Valid token from the user
+            required: true
+            type: string
+        responses:
+          201:
+            description: GamificationID for the Admin
+            schema:
+              type: object
+              items:
+                $ref: '#/definitions/Environment'
+          400:
+            description: Bad Request
+            schema:
+              $ref: '#/definitions/Error'
+          403:
+            description: Bad Request unauthorized
+            schema:
+              $ref: '#/definitions/Error'
+  /{environmentID}/Login:
+    get:
+      summary: Login to the gamification environment and returns a token
+      description: |
+        Login for every user in the service, returns a token
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: userName
+          in: query
+          description: username of the player/admin/developer who wants to login
+          required: true
+          type: string
+        - name: userPassword
+          in: query
+          required: true
+          type: string
+      responses:
+        201:
+          description: Token for authentification
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Token'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Bad Request username or password incorrect
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/OAuthLogin:
+    get:
+      summary: Login via Oauth
+      description: |
+        Login with an OAuth partner service, returns a token from the system.
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: serviceToken
+          in: query
+          description: token from the partner service e.g. Facebook 
+          required: true
+          type: string
+      responses:
+        201:
+          description: Token for authentification
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Token'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: User not found in the gamificationservice
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/IMEILogin:
+    get:
+      summary: Login via Oauth
+      description: |
+        Login with an OAuth partner service, returns a token from the system.
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: serviceToken
+          in: query
+          description: token from the partner service e.g. Facebook 
+          required: true
+          type: string
+      responses:
+        201:
+          description: Token for authentification
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Token'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: User not found in the gamificationservice
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Logoff:
+    get:
+      summary: Logoff from the Service
+      description: |
+        Logoff from the System to make the token invalid
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: query
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Sucessfully logged off
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Player:
+    get:
+      summary: Player from the service
+      description: |
+        Returns all players from the system, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: query
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: player response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create a new Player
+      description: |
+        Creates a new Player and returns the ID of him.
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: PlayerName
+          in: query
+          description: Name of the new Player
+          required: true
+          type: string
+        - name: PlayerPassword
+          in: query
+          required: true
+          type: string
+        - name: PlayerEMail
+          in: query
+          required: true
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Player
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Token'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: User not found in the gamificationservice
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Player/{Player}:
+    get:
+      summary: Player from the service
+      description: |
+        Returns a single player based on a single ID, if the user has access
+      operationId: find a player by id
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the searched Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: searched player
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a player from the service
+      description: |
+        Returns a single player based on a single ID, if the user has access
+      operationId: id from the player
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: player deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Player/{Player}/Badges:
+    get:
+      summary: Badges from player
+      description: |
+        Returns all Badges from a single player, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: query
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: badges response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Badge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Player/{Player}/Badges/{Badge}:
+    get:
+      summary: Badge from a player
+      description: |
+        Returns a single badge based on a single ID, if the user has access
+      operationId: find a badge from a user by id
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: ID of the Badge 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Returns the badge
+          schema:
+            $ref: '#/definitions/Badge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Player/{Player}/Identities:
+    get:
+      summary: Identities from a player
+      description: |
+        Returns all identities from a players in the system, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: query
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: identity response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Identity'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create Identity
+      description: |
+        Creates a new Identity to a player and returns the ID of it.
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: email
+          in: query
+          description: EMail of the new identity
+          required: false
+          type: string
+        - name: imei
+          in: query
+          required: false
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Identity
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Identity'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Player/{Player}/Identities/{Identity}:
+    get:
+      summary: Specific Identity of a player
+      description: |
+        Returns a single identity based on a single ID, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Identity
+          in: path
+          description: ID of the searched Identity 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Identites of a player
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Identity'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a identity from a player
+      description: |
+        returns a status code
+      operationId: id from the identity
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Identity
+          in: path
+          description: ID of the deleted identity 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: identity deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Player/{Player}/Challenges:
+    get:
+      summary: Challenges from a player
+      description: |
+        Returns all Challenges where the player is part of or has won, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: query
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: challenge response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Challenge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/{Player}/Tags:
+    get:
+      summary: Tags from a player
+      description: |
+        Returns all Tags from a player and the nodes where the player is part of, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: query
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: tag response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create Tag
+      description: |
+        Creates a new Tag to a player and returns the ID of it.
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: id
+          in: query
+          description: id of an created tag which should be linked to the player
+          required: true
+          type: integer
+          format: int64
+      responses:
+        201:
+          description: Created Identity
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Identity'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/{Player}/Tags/{Tag}:
+    get:
+      summary: Specific Tag of a player
+      description: |
+        Returns a single tag based on his ID, if the user has access
+      operationId: find a tag by id
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Tag
+          in: path
+          description: ID of the searched Tag 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Tag of a player
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a Tag from a player
+      description: |
+        delete a tag mapping to a player, if its not from a node and returns a status code
+      operationId: id from the Tag
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Tag
+          in: path
+          description: ID of the deleted Tag 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: tag mapping deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'  
+  /{environmentID}/{Player}/Nodes:
+    get:
+      summary: Nodes from a Player
+      description: |
+        Returns all Nodes where a player is part of, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Nodes of a player
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/{Player}/Points:
+    get:
+      summary: Total Points from a Player
+      description: |
+        Returns the total Points of a player, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Nodes of a player
+          schema:
+            type: integer
+            format: int32
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/{Player}/Categories:
+    get:
+      summary: Categories from a Player
+      description: |
+        Returns the all categories of a player, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: ID of the Player 
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Categories of a player
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Categories:
+    put:
+      summary: Create a new Category
+      description: |
+        Creates a new Category and returns the ID of it.
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: CategoryName
+          in: query
+          description: Name of the new Category
+          required: true
+          type: string
+        - name: Discription
+          in: query
+          required: false
+          description: Description of the Category.
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Category
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Return all Categories
+      description: |
+        Returns all Categories from the Environment
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Return all Categories
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Categories/{Category}:
+    get:
+      summary: Return a single Category
+      description: |
+        Returns a single Category Category from the Environment
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: Id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Return all Categories
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a specific Category
+      description: |
+        Deletes a single Category Category from the Environment
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: Id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Category Deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Categories/{Category}/Badges:
+    get:
+      summary: Return all Badges from a Category
+      description: |
+        Returns all Badges from a single Category 
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Return all Badges
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Badge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Categories/{Category}/Badges/{Badge}:
+    put:
+      summary: Map a Badge to a Category
+      description: |
+        Mapps a Badge from the environment to the Category
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: badge which is to map to the category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Badge sucessfully mapped
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Category'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Mapping
+      description: |
+        Deletes the Mapping from a Badge to a Category
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: badge which is mapped to the category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Badge sucessfully unmapped
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Category'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Badges:
+    get:
+      summary: Badges from a Player
+      description: |
+        Returns the all Badges from the environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Badges of the environment
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Badge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create a new Badge
+      description: |
+        Creates a new Badge and returns the ID of it.
+      parameters:
+        - name: environmentID
+          in: path
+          description: id from the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: BadgeName
+          in: query
+          description: Name of the new Badge
+          required: true
+          type: string
+        - name: Discription
+          in: query
+          required: false
+          description: Description of the Badge.
+          type: string
+        - name: Points
+          in: query
+          required: true
+          description: Points when the Badge is won
+          type: string
+        - name: Picture
+          in: query
+          required: false
+          description: Picture of the Badge.
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Player
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Badge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Badges/{Badge}:
+    get:
+      summary: Badges in the environment
+      description: |
+        Returns a single Badges from the environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: id of the badge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Badges of the environment
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Badge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Badge from Environment
+      description: |
+        Deletes a single Badges from the environment, if the user has access.
+        The Badge is also deleted from all Users
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: id of the badge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Badge deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Badge/{Badge}/Categories:
+    get:
+      summary: Categories from a Bade
+      description: |
+        Returns the all Categories where a specific Badge is part of, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: id of the badge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Categories of the Badge
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Badge/{Badge}/Players:
+    get:
+      summary: Players in Badge
+      description: |
+        Returns all Player who can win this badge, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: id of the badge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Players of the Badge
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Challenges:
+    get:
+      summary: Challenges in the environment
+      description: |
+        Returns all Challenges from the environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Challenges of the environment
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Challenge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create Challenge in the environment
+      description: |
+        Creates a new Challenge and returns the Challenges after creation, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: ChallengeName
+          in: query
+          required: true
+          description: Name of the Challenge
+          type: string
+        - name: Points
+          in: query
+          required: false
+          description: Points to win Challenge
+          type: integer
+          format: int32
+        - name: ChallengeScript
+          in: query
+          required: false
+          description: Script to estimate a winning player
+          type: string 
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Challenge
+          schema:
+            $ref: '#/definitions/Challenge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Achievement/Challenges/{Challenge}:
+    get:
+      summary: Single Challenge in the environment
+      description: |
+        Returns a single Challenges of the environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Challenge
+          in: path
+          description: id of the searched Challenge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Challenge of the environment
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Challenge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'  
+    put:
+      summary: Edit Challenge in the environment
+      description: |
+        Creates a new Challenge and returns the Challenges after creation, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Challenge
+          in: path
+          required: true
+          description: Challenge to edit
+          type: integer
+          format: int32
+        - name: ChallengeName
+          in: query
+          required: false
+          description: New Name of the Challenge
+          type: string
+        - name: Points
+          in: query
+          required: false
+          description: New Points to win Challenge
+          type: integer
+          format: int32
+        - name: ChallengeScript
+          in: query
+          required: false
+          description: New Script to estimate a winning player
+          type: string 
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Challenge
+          schema:
+            $ref: '#/definitions/Challenge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a single Challenge in the environment
+      description: |
+        Returns Status Code 200 if the challenge is deleted, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Challenge
+          in: path
+          description: id of the searched Challenge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Challenge Deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'  
+  /{environmentID}/Categories/{Category}/Badges:
+    get:
+      summary: Badges of a Category
+      description: |
+        Returns all Badges of a Category, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Badges of the specific Category
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Badge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'  
+  /{environmentID}/Categories/{Category}/Badges/{Badge}:
+    put:
+      summary: Mapping Badge Category
+      description: |
+        Add a Mapping from a Badge to a Category, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          required: true
+          description: id of the Badge which should be mapped
+          type: integer
+          format: int32
+        - name: Category
+          in: path
+          required: true
+          description: id of the Category where the Badge should be mapped to
+          type: integer
+          format: int32
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Challenge
+          schema:
+            $ref: '#/definitions/Challenge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Badge Mapping
+      description: |
+        Deletes the Mapping from a Badge to the Category, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: id of the Badge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Badge Mapping deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'  
+  /{environmentID}/Categories/{Category}/Nodes:
+    get:
+      summary: Nodes from a Category
+      description: |
+        Returns all Nodes where a Category is mapped, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: All Nodes from the Category
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error' 
+  /{environmentID}/Categories/{Category}/Player:
+    get:
+      summary: Player from a Category
+      description: |
+        Returns all Player which are in a Category, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: All Nodes from the Category
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error' 
+  /{environmentID}/Categories/{Category}/Player/{Player}/Level:
+    get: 
+      summary: Category Playerlevel
+      description: |
+        Returns the Level of a Player from the Category oferall, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Level from the Player to the Category
+          schema:
+            type: integer
+            format: int32
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes:
+    get: 
+      summary: All Nodes from the Environment
+      description: |
+        Returns all Nodes from the Environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Nodes of the Environment
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put: 
+      summary: Create Node
+      description: |
+        Returns the Level of a Player from the Category oferall, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: NodeName
+          in: query
+          description: Name of the Node
+          required: true
+          type: string
+        - name: NodeDescription
+          in: query
+          description: Discription of the Node
+          required: true
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Node
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Node'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}:
+    get: 
+      summary: Single Node from the Environment
+      description: |
+        Returns a single Node from the Environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Nodes of the Environment
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Node'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put: 
+      summary: Edit a specific Node
+      description: |
+        Returns the Level of a Player from the Category oferall, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: NodeName
+          in: query
+          description: New Name of the Node
+          required: true
+          type: string
+        - name: NodeDescription
+          in: query
+          description: New Discription of the Node
+          required: true
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Edited Node
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Node'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete a specific Node
+      description: |
+        Returns the Level of a Player from the Category oferall, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node to delete
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Node deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Players:
+    get: 
+      summary: Return Players in Node
+      description: |
+        Returns all Players in a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Players in a Node
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Players/{Player}:
+    put: 
+      summary: Add Player to Node
+      description: |
+        Add a Player to a Node if possible, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: id of the specific Player
+          required: true
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Player added
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete: 
+      summary: Delete Player to Node
+      description: |
+        Delete a Mapping from a Player to a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: id of the specific Player
+          required: true
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Player deleted
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Node'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Player/{Player}/Level:
+    get: 
+      summary: Get Level from Player
+      description: |
+        Returns the Level of the Player to the specific Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: id of the specific Player
+          required: true
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Level of the Player
+          schema:
+            type: integer
+            format: int32
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Sender:
+    get: 
+      summary: Sender from the Node
+      description: |
+        Returns the Sender from the Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Sender from the Node
+          schema:
+            $ref: '#/definitions/Sender'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put: 
+      summary: Add a Sender to a Node or Replace the existend sender
+      description: |
+        Returns the Sender from the Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: SenderName
+          in: query
+          description: Name of the Sender
+          required: true
+          type: string
+        - name: SenderDescription
+          in: query
+          description: Description of the Sender
+          required: true
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Sender from the Node with authentificationKey
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Sender'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Tags:
+    get:
+      summary: Tags in Node
+      description: |
+        Returns the Tags from the Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Tags in Node
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Tags/{Tag}:
+    put:
+      summary: Add Tag to Node
+      description: |
+        Returns the Tags from the Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Tag
+          in: path
+          description: id of the Tag
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Tag added to Node
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Tag from Node
+      description: |
+        Deletes the Tag from the node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Tag
+          in: path
+          description: id of the Tag
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Tag deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Kontext:
+    get:
+      summary: Kontexte in Node
+      description: |
+        Returns the Kontexte from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Kontexte from a Node
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Kontext/{Node}:
+    put:
+      summary: Add Kontext to Node
+      description: |
+        Add a Kontext to a Node by his id, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Kontext
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Kontexte added to Node
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Kontext
+      description: |
+        Delete a Kontext from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Kontext
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Kontexte deleted from Node
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Categories:
+    get:
+      summary: Categories in Node
+      description: |
+        Returns the Categories from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Categories from a Node
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Categories/{Category}:
+    put:
+      summary: Add Category to Node
+      description: |
+        Add a Category to a Node by his id, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Category added to Node
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Category
+      description: |
+        Delete a Category from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Category deleted from Node
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Categories/{Category}/{Player}/Points:
+    get:
+      summary: Player Points
+      description: |
+        Returns the Points of a Player in the Category from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of the Category in a Node
+          schema:
+            type: integer
+            format: int32
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Player Points
+      description: |
+        Add Points to a Player in the Category from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Points
+          in: query
+          description: Points which the user gets to the Category
+          required: true
+          type: integer
+          format: int32
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points added
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Challenges:
+    get:
+      summary: Challenges in Node
+      description: |
+        Returns the Challenges from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Challenges from a Node
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Challenge'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Challenge/{Challenge}:
+    put:
+      summary: Add Challenge to Node
+      description: |
+        Add a Challenge to a Node by his id, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Challenge
+          in: path
+          description: id of the Challenge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Challenge added to Node
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete Challenge
+      description: |
+        Delete a Challenge from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Challenge
+          in: path
+          description: id of the Challenge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Challenge deleted from Node
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Nodes/{Node}/Challenge/{Challenge}/{Player}/Points:
+    get:
+      summary: Player Points
+      description: |
+        Returns the Points of a Player in the Challenge from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Challenge
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of Player in the Challenge 
+          schema:
+            type: integer
+            format: int32
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Player Points
+      description: |
+        Add Points to a Player in the Challenge from a Node, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Challenge
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Player
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Points
+          in: query
+          description: Points which the user gets to the Challenge
+          required: true
+          type: integer
+          format: int32
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points added
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rank/Player:
+    get:
+      summary: Player Rank of the environment
+      description: |
+        Returns a Rank based on the Player Points, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of all Player
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PlayerRank'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rank/{Category}:
+    get:
+      summary: Player Category-Rank of the environment
+      description: |
+        Returns a Rank based on the Category Points, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Category
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of Player in the Category 
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PlayerRank'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rank/{Category}/{Badge}:
+    get:
+      summary: Player Badge-Rank of the environment
+      description: |
+        Returns a Rank based on the Badge Points and to see how many people does the badge has won, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Category
+          in: path
+          description: id of the Badge
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: id of the Badge
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of Player in the Badge 
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PlayerRank'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rank/Node/{Node}:
+    get:
+      summary: Player Node-Rank of the environment
+      description: |
+        Returns a Rank based on the Node Points, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Node
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of Player in the Node 
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PlayerRank'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rank/Tags/{Tag}:
+    get:
+      summary: Player Tag-Rank of the environment
+      description: |
+        Returns a Rank based on the Tag Points, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Tag
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of the Player with Tag 
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PlayerRank'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rank/Badges/{Badge}:
+    get:
+      summary: Player Tag-Rank of the environment
+      description: |
+        Returns a Rank based on the Tag Points, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Badge
+          in: path
+          description: id of the Node
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of the Player with Badge won 
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PlayerRank'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Tags:
+    get:
+      summary: Tags from the Environment
+      description: |
+        Returns all Tags which are in the Environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of the Player with Badge won 
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Create a new Tag
+      description: |
+        Returns the crated Tag, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: TagName
+          in: query
+          required: true
+          description: Name of the Tag
+          type: string
+        - name: TagDescription
+          in: query
+          required: true
+          description: Description to the Tag
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Tag 
+          schema:
+            $ref: '#/definitions/Tag'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Tags/{Tag}:
+    put:
+      summary: Edit Tag
+      description: |
+        Edit a Tag on the Serivce, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Tag
+          in: path
+          description: id of the Tag
+          required: true
+          type: integer
+          format: int64
+        - name: TagName
+          in: query
+          required: true
+          description: New Name of the Tag
+          type: string
+        - name: TagDescription
+          in: query
+          required: true
+          description: New Description to the Tag
+          type: string
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Created Tag 
+          schema:
+            $ref: '#/definitions/Tag'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: delete Tag
+      description: |
+        Delete a Tag on the Serivce, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Tag
+          in: path
+          description: id of the Tag
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Tag deleted
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Tags/{Tag}/Player:
+    get:
+      summary: Tags from the Environment
+      description: |
+        Returns all Player which has the Tag from a Node or directly defined, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Tag
+          in: path
+          description: id of the Tag
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Points of the Player with Badge won 
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rules:
+    get:
+      summary: Rules from the Environment
+      description: |
+        Returns all Rules from the Environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Rules from the Environment
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Rule'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Rules from the Environment
+      description: |
+        Returns all Rules from the Environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: ruleName
+          in: query
+          description: name of the rule
+          required: true
+          type: string
+        - name: skript
+          in: query
+          description: skript of the rule
+          required: true
+          type: string
+        - name: isAktive
+          in: query
+          description: defines if the rule is set active or inactive
+          required: true
+          type: boolean
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Rules from the Environment
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Rule'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rules/{Rule}:
+    put:
+      summary: Rules from the Environment
+      description: |
+        Edit a existing Rule, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Rule
+          in: path
+          description: id of the Rule
+          required: true
+          type: integer
+          format: int64
+        - name: ruleName
+          in: query
+          description: new name of the rule
+          required: true
+          type: string
+        - name: skript
+          in: query
+          description: new skript of the rule
+          required: true
+          type: string
+        - name: isAktive
+          in: query
+          description: defines if the rule is set active or inactive
+          required: true
+          type: boolean
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Rules from the Environment
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Rule'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Rule from the Environment
+      description: |
+        Returns a single Rules from the Environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Rule
+          in: path
+          description: id of the Rule
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Rule from the Environment
+          schema:
+            $ref: '#/definitions/Rule'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Rule from the Environment
+      description: |
+        Delete a rule from the Service, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Rule
+          in: path
+          description: id of the Rule
+          required: true
+          type: integer
+          format: int64
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        200:
+          description: Rule from the Environment
+          schema:
+            $ref: '#/definitions/Rule'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+  /{environmentID}/Rules/{Rule}/SetActiveInactive:
+    put:
+      summary: Rule from the Environment
+      description: |
+        Returns a single Rules from the Environment, if the user has access
+      parameters:
+        - name: environmentID
+          in: path
+          description: id of the gamificationenvironment
+          required: true
+          type: integer
+          format: int64
+        - name: Rule
+          in: path
+          description: id of the Rule
+          required: true
+          type: integer
+          format: int64
+        - name: IsActive
+          in: query
+          description: sets the rule active or inactive
+          required: true
+          type: boolean
+        - name: Token
+          in: header
+          description: Valid token from the user
+          required: true
+          type: string
+      responses:
+        201:
+          description: Rule edited
+          schema:
+            $ref: '#/definitions/Rule'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: Invalid token error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Token:
+    required:
+      - authentificationKey
+      - user
+    properties:
+      authentificationKey:
+        type: string
+      senderID:
+        type: integer
+        format: int32
+      user:
+        type: string
+  User:
+    type: object
+    properties:
+      username:
+       type: string
+      userID:
+       type: integer
+       format: int32
+  Rule:
+    type: object
+    properties:
+      rulename:
+       type: string
+      skript:
+       type: integer
+       format: int32
+      isActive:
+       type: boolean
+  Environment:
+    type: object
+    properties:
+      name:
+        type: string
+      id:
+        type: integer
+        format: int64
+  Sender:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      authentificationKey:
+        type: integer
+        format: int64
+      id:
+        type: integer
+        format: int64
+  Challenge:
+    type: object
+    properties:
+      name:
+        type: string
+      challengeDescription:
+        type: string
+      expierencePoints:
+        type: integer
+        format: int32
+      skript:
+        type: string
+      id:
+        type: integer
+        format: int32
+      hasWon:
+        type: boolean
+  Badge:
+    type: object
+    properties:
+      name:
+        type: string
+      badeDescription:
+        type: string
+      expierencePoints:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+  Category:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+        format: int32
+  Node:
+    type: object
+    properties:
+      name:
+        type: string
+      nodeDescription:
+        type: string
+      id:
+        type: integer
+        format: int32
+  Tag:
+    properties:
+      name:
+        type: string
+      tagDescription:
+        type: string
+      id:
+        type: integer
+        format: int32
+  Identity:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      email:
+        type: string
+      imei:
+        type: string
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  PlayerRank:
+    type: object
+    properties:
+      userId:
+        type: integer
+        format: int32
+      userPoints: 
+        type: integer
+        format: int32
+        
+        
