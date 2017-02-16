@@ -57,7 +57,7 @@ paths:
             description: Bad Request unauthorized
             schema:
               $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Login:
+  /{environmentID}/v1/Login:
     get:
       summary: Login to the gamification environment and returns a token
       description: |
@@ -93,7 +93,7 @@ paths:
           description: Bad Request username or password incorrect
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/OAuthLogin:
+  /{environmentID}/v1/OAuthLogin:
     get:
       summary: Login via Oauth
       description: |
@@ -125,7 +125,7 @@ paths:
           description: User not found in the gamificationservice
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/IMEILogin:
+  /{environmentID}/v1/IMEILogin:
     get:
       summary: Login via Oauth
       description: |
@@ -157,7 +157,7 @@ paths:
           description: User not found in the gamificationservice
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Logoff:
+  /{environmentID}/v1/Logoff:
     get:
       summary: Logoff from the Service
       description: |
@@ -181,7 +181,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Player:
+  /{environmentID}/v1/Player:
     get:
       summary: Player from the service
       description: |
@@ -257,7 +257,7 @@ paths:
           description: User not found in the gamificationservice
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Player/{Player}:
+  /{environmentID}/v1/Player/{Player}:
     get:
       summary: Player from the service
       description: |
@@ -330,7 +330,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Player/{Player}/Badges:
+  /{environmentID}/v1/Player/{Player}/Badges:
     get:
       summary: Badges from player
       description: |
@@ -368,7 +368,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Player/{Player}/Badges/{Badge}:
+  /{environmentID}/v1/Player/{Player}/Badges/{Badge}:
     get:
       summary: Badge from a player
       description: |
@@ -411,7 +411,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Player/{Player}/Identities:
+  /{environmentID}/v1/Player/{Player}/Identities:
     get:
       summary: Identities from a player
       description: |
@@ -495,7 +495,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Player/{Player}/Identities/{Identity}:
+  /{environmentID}/v1/Player/{Player}/Identities/{Identity}:
     get:
       summary: Specific Identity of a player
       description: |
@@ -579,7 +579,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Player/{Player}/Challenges:
+  /{environmentID}/v1/Player/{Player}/Challenges:
     get:
       summary: Challenges from a player
       description: |
@@ -617,7 +617,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/{Player}/Tags:
+  /{environmentID}/v1/Player/{Player}/Tags:
     get:
       summary: Tags from a player
       description: |
@@ -693,7 +693,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/{Player}/Tags/{Tag}:
+  /{environmentID}/v1/Player/{Player}/Tags/{Tag}:
     get:
       summary: Specific Tag of a player
       description: |
@@ -778,7 +778,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'  
-  /{environmentID}/v1.0/{Player}/Nodes:
+  /{environmentID}/v1/Player/{Player}/Nodes:
     get:
       summary: Nodes from a Player
       description: |
@@ -816,7 +816,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/{Player}/Points:
+  /{environmentID}/v1/Player/{Player}/Points:
     get:
       summary: Total Points from a Player
       description: |
@@ -853,7 +853,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/{Player}/Categories:
+  /{environmentID}/v1/Player/{Player}/Categories:
     get:
       summary: Categories from a Player
       description: |
@@ -891,7 +891,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Categories:
+  /{environmentID}/v1/Achievement/Categories:
     put:
       summary: Create a new Category
       description: |
@@ -964,7 +964,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Categories/{Category}:
+  /{environmentID}/v1/Achievement/Categories/{Category}:
     get:
       summary: Return a single Category
       description: |
@@ -1035,7 +1035,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Categories/{Category}/Badges:
+  /{environmentID}/v1/Achievement/Categories/{Category}/Badges:
     get:
       summary: Return all Badges from a Category
       description: |
@@ -1073,7 +1073,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Categories/{Category}/Badges/{Badge}:
+  /{environmentID}/v1/Achievement/Categories/{Category}/Badges/{Badge}:
     put:
       summary: Map a Badge to a Category
       description: |
@@ -1160,7 +1160,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Badges:
+  /{environmentID}/v1/Achievement/Badges:
     get:
       summary: Badges from a Player
       description: |
@@ -1243,7 +1243,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Badges/{Badge}:
+  /{environmentID}/v1/Achievement/Badges/{Badge}:
     get:
       summary: Badges in the environment
       description: |
@@ -1315,7 +1315,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Badge/{Badge}/Categories:
+  /{environmentID}/v1/Achievement/Badge/{Badge}/Categories:
     get:
       summary: Categories from a Bade
       description: |
@@ -1353,7 +1353,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Badge/{Badge}/Players:
+  /{environmentID}/v1/Achievement/Badge/{Badge}/Players:
     get:
       summary: Players in Badge
       description: |
@@ -1391,7 +1391,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Challenges:
+  /{environmentID}/v1/Achievement/Challenges:
     get:
       summary: Challenges in the environment
       description: |
@@ -1468,7 +1468,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Achievement/Challenges/{Challenge}:
+  /{environmentID}/v1/Achievement/Challenges/{Challenge}:
     get:
       summary: Single Challenge in the environment
       description: |
@@ -1590,7 +1590,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'  
-  /{environmentID}/v1.0/Categories/{Category}/Badges:
+  /{environmentID}/v1/Categories/{Category}/Badges:
     get:
       summary: Badges of a Category
       description: |
@@ -1628,7 +1628,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'  
-  /{environmentID}/v1.0/Categories/{Category}/Badges/{Badge}:
+  /{environmentID}/v1/Categories/{Category}/Badges/{Badge}:
     put:
       summary: Mapping Badge Category
       description: |
@@ -1709,7 +1709,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'  
-  /{environmentID}/v1.0/Categories/{Category}/Nodes:
+  /{environmentID}/v1/Categories/{Category}/Nodes:
     get:
       summary: Nodes from a Category
       description: |
@@ -1747,7 +1747,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error' 
-  /{environmentID}/v1.0/Categories/{Category}/Player:
+  /{environmentID}/v1/Categories/{Category}/Player:
     get:
       summary: Player from a Category
       description: |
@@ -1785,7 +1785,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error' 
-  /{environmentID}/v1.0/Categories/{Category}/Player/{Player}/Level:
+  /{environmentID}/v1/Categories/{Category}/Player/{Player}/Level:
     get: 
       summary: Category Playerlevel
       description: |
@@ -1828,7 +1828,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes:
+  /{environmentID}/v1/Nodes:
     get: 
       summary: All Nodes from the Environment
       description: |
@@ -1901,7 +1901,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}:
+  /{environmentID}/v1/Nodes/{Node}:
     get: 
       summary: Single Node from the Environment
       description: |
@@ -2019,7 +2019,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Players:
+  /{environmentID}/v1/Nodes/{Node}/Players:
     get: 
       summary: Return Players in Node
       description: |
@@ -2057,7 +2057,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Players/{Player}:
+  /{environmentID}/v1/Nodes/{Node}/Player/{Player}:
     put: 
       summary: Add Player to Node
       description: |
@@ -2138,7 +2138,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Player/{Player}/Level:
+  /{environmentID}/v1/Nodes/{Node}/Player/{Player}/Level:
     get: 
       summary: Get Level from Player
       description: |
@@ -2180,7 +2180,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Sender:
+  /{environmentID}/v1/Nodes/{Node}/Sender:
     get: 
       summary: Sender from the Node
       description: |
@@ -2263,7 +2263,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Tags:
+  /{environmentID}/v1/Nodes/{Node}/Tags:
     get:
       summary: Tags in Node
       description: |
@@ -2301,7 +2301,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Tags/{Tag}:
+  /{environmentID}/v1/Nodes/{Node}/Tags/{Tag}:
     put:
       summary: Add Tag to Node
       description: |
@@ -2380,7 +2380,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Kontext:
+  /{environmentID}/v1/Nodes/{Node}/Kontext:
     get:
       summary: Kontexte in Node
       description: |
@@ -2418,7 +2418,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Kontext/{Node}:
+  /{environmentID}/v1/Nodes/{Node}/Kontext/{Node}:
     put:
       summary: Add Kontext to Node
       description: |
@@ -2485,7 +2485,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Categories:
+  /{environmentID}/v1/Nodes/{Node}/Categories:
     get:
       summary: Categories in Node
       description: |
@@ -2523,7 +2523,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Categories/{Category}:
+  /{environmentID}/v1/Nodes/{Node}/Categories/{Category}:
     put:
       summary: Add Category to Node
       description: |
@@ -2602,7 +2602,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Categories/{Category}/{Player}/Points:
+  /{environmentID}/v1/Nodes/{Node}/Categories/{Category}/Player/{Player}/Points:
     get:
       summary: Player Points
       description: |
@@ -2702,7 +2702,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Challenges:
+  /{environmentID}/v1/Nodes/{Node}/Challenges:
     get:
       summary: Challenges in Node
       description: |
@@ -2740,7 +2740,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Challenge/{Challenge}:
+  /{environmentID}/v1/Nodes/{Node}/Challenge/{Challenge}:
     put:
       summary: Add Challenge to Node
       description: |
@@ -2819,7 +2819,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Nodes/{Node}/Challenge/{Challenge}/{Player}/Points:
+  /{environmentID}/v1/Nodes/{Node}/Challenge/{Challenge}/Player/{Player}/Points:
     get:
       summary: Player Points
       description: |
@@ -2919,7 +2919,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rank/Player:
+  /{environmentID}/v1/Rank/Player:
     get:
       summary: Player Rank of the environment
       description: |
@@ -2951,7 +2951,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rank/{Category}:
+  /{environmentID}/v1/Rank/{Category}:
     get:
       summary: Player Category-Rank of the environment
       description: |
@@ -2989,7 +2989,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rank/{Category}/{Badge}:
+  /{environmentID}/v1/Rank/{Category}/{Badge}:
     get:
       summary: Player Badge-Rank of the environment
       description: |
@@ -3033,7 +3033,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rank/Node/{Node}:
+  /{environmentID}/v1/Rank/Node/{Node}:
     get:
       summary: Player Node-Rank of the environment
       description: |
@@ -3071,7 +3071,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rank/Tags/{Tag}:
+  /{environmentID}/v1/Rank/Tags/{Tag}:
     get:
       summary: Player Tag-Rank of the environment
       description: |
@@ -3109,7 +3109,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rank/Badges/{Badge}:
+  /{environmentID}/v1/Rank/Badges/{Badge}:
     get:
       summary: Player Tag-Rank of the environment
       description: |
@@ -3147,7 +3147,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Tags:
+  /{environmentID}/v1/Tags:
     get:
       summary: Tags from the Environment
       description: |
@@ -3218,7 +3218,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Tags/{Tag}:
+  /{environmentID}/v1/Tags/{Tag}:
     put:
       summary: Edit Tag
       description: |
@@ -3297,7 +3297,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Tags/{Tag}/Player:
+  /{environmentID}/v1/Tags/{Tag}/Player:
     get:
       summary: Tags from the Environment
       description: |
@@ -3335,7 +3335,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rules:
+  /{environmentID}/v1/Rules:
     get:
       summary: Rules from the Environment
       description: |
@@ -3413,7 +3413,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rules/{Rule}:
+  /{environmentID}/v1/Rules/{Rule}:
     put:
       summary: Rules from the Environment
       description: |
@@ -3536,7 +3536,7 @@ paths:
           description: Invalid token error
           schema:
             $ref: '#/definitions/Error'
-  /{environmentID}/v1.0/Rules/{Rule}/SetActiveInactive:
+  /{environmentID}/v1/Rules/{Rule}/SetActiveInactive:
     put:
       summary: Rule from the Environment
       description: |
